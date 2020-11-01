@@ -5,10 +5,8 @@ def main():
 
     while True:
 
-        menu_option = draw_menu(main_menu)
-
-        input(menu_option)
-        
+        menu_option = draw_menu(main_menu,'baaaabca')
+                
         if menu_option == 3:
             input("Exit")
             return
