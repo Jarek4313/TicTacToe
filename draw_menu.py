@@ -3,6 +3,8 @@ import time
 from user_input import input_from_user
 from const_variables import alpha_ascii_list
 
+# for item in moja_lista:
+#     print(item.imie + " " + str(item.punkty))
 #funkcja "czuwająca" nad tym, aby kursor w menu zawsze wskazywał na pozycję menu i nie dało się wyjść poza opcje
 def set_arrow_idnication(arrow_idnication, arrow_options):
     if arrow_idnication < 0:
