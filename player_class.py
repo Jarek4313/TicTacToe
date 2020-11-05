@@ -1,6 +1,7 @@
 import sys
-#sys.path.append('c:/TicTacToe/function_folder/')
 from const_variables import alpha_numeric_upper_and_down
+
+#sys.path.append('c:/TicTacToe/function_folder/')
 #from ...app.function_folder.const_variables import alpha_numeric_upper_and_down
 #functoconst_variables import alpha_numeric_upper_and_down
 

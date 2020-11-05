@@ -1,34 +1,45 @@
 from draw_menu import draw_menu
 from const_variables import main_menu
-from const_variables import set_dificult_level_menu
+from const_variables import set_difficulty_level_menu
 from const_variables import game_mode_menu
+from const_variables import game_logo
+
+from game_class import Game
 from dificult_level_class import Dificult_Level
 from player_class import Player
+from game_mode_class import Game_Mode
 
 def main():
     #print("-"*80,"main OK")
 
     #główne obiekty projektu
-    dificult_level = Dificult_Level(11)
-    player_one = Player()
-    player_two = Player()
-    game_mode = 
+    difficult_level = Dificult_Level()
+    game_mode = Game_Mode()
+    game = Game()
+
+
     while True:
 
-        menu_option = draw_menu(main_menu,'tictactoe')
+        menu_option = draw_menu(main_menu, game_logo)
 
 
         if menu_option == 0:
-            menu_option = draw_menu(game_mode_menu, 'abc')
-            # while player_one.Name == None:
-            #     name = input("Podaj imię: ")
-            #     player_one.Name = name
-            
+            menu_option = draw_menu(game_mode_menu, 'set game mode')
+
+            if not menu_option == 3:
+                game_mode.Mode = menu_option                
+                
+                game.Set_Game_Mode(game_mode)
+                game.Set_Difficulty_Level(difficult_level)     
+                game.Set_Players_Name()
+                game.Start_Game()
+                        
             menu_option = None
 
+
         if menu_option == 2:
-            menu_option = draw_menu(set_dificult_level_menu, 'difficultylevel')
-            dificult_level.Level = menu_option
+            menu_option = draw_menu(set_difficulty_level_menu, 'difficulty level')
+            difficult_level.Level = menu_option
             menu_option = None
 
         if menu_option == 3:

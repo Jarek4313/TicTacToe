@@ -1,6 +1,6 @@
 class Dificult_Level:
-    def __init__(self, level):
-        self.__level = level
+    def __init__(self):
+        self.__level = 'normal'
 
     @property
     def Level(self):
