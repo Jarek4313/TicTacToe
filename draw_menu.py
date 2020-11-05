@@ -67,12 +67,12 @@ def draw_menu(menu_to_draw, logo=""):
                 
         if arrow_indication >= 100:            
             arrow_indication = 0
-            time.sleep(0.14)
+            time.sleep(0.15)
             return result_draw_menu(menu_to_draw, tmp_arrow_indication)
 
         arrow_indication = set_arrow_idnication(arrow_indication, arrow_options)
 
-        time.sleep(0.2)
+        time.sleep(0.21)
 
 def draw_logo(logo):
     path = r'c:\TicTacToe\ascii_alphabet.txt'
