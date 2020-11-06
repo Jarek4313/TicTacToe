@@ -1,17 +1,24 @@
 import os
+import time
+
+from draw_grid import draw_grid
+from draw_grid import draw_grid_validation_position_input
+from draw_grid import draw_grid_make_mark
+from user_input import game_play_input
 
 from player_class import Player
 from game_mode_class import Game_Mode
 from dificult_level_class import Dificult_Level
+
 from draw_menu import draw_logo
 class Game:
     def __init__(self):
         self.__player_one = None
         self.__player_two = None
-        #self.__difficulty_level = None
         self.__difficulty_level = Dificult_Level()
-        #self.__game_mode = None
         self.__game_mode = Game_Mode()
+        #self.__game_mode = None
+        #self.__difficulty_level = None
 
     # @property
     # def Game_Mode(self):
@@ -55,9 +62,31 @@ class Game:
 
     def Start_Game(self):
         os.system("cls || clear")
+        game_input = 0
+        game_position_index = 0
+        grid_list = [' ',' ',' ',' ',' ',' ',' ',' ',' ']
+        while True:
+            os.system("cls || clear")
+            print(draw_grid(game_input))
 
-        print(self.__game_mode.Mode)
-        print(self.__difficulty_level.Level)
-        print(self.__player_one.Name)
-        print(self.__player_two.Name)
-        input("OK")
+            game_input += game_play_input()
+            
+            draw_grid_make_mark(game_input, game_position_index, grid_list, 'X')
+
+            game_input = draw_grid_validation_position_input(game_input)
+            
+            game_position_index = game_input
+            print(grid_list)
+            time.sleep(0.21)
+            
+            
+        #print(self.__game_mode.Mode)
+        #print(self.__difficulty_level.Level)
+        #print(self.__player_one.Name)
+        #print(self.__player_two.Name)
+        #input("OK")
+
+    
+
+game = Game()
+game.Start_Game()
