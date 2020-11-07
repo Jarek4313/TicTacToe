@@ -4,7 +4,7 @@ import os
 from user_input import game_play_input
 import time
 
-def draw_grid(pozycja):
+def draw_grid(pozycja, grid_list):
     grid = ""
     for i in range(28):
         grid += "="
@@ -25,7 +25,7 @@ def draw_grid(pozycja):
 
     mod_x = 0
     mod_y = 0
-    tmp_grid = ""
+    cursor_grid = ""
     
     for item in range(len(grid)):
         if pozycja <= 2:
@@ -40,12 +40,30 @@ def draw_grid(pozycja):
             mod_y = 280
 
         if item >= mod_y + 69 + (mod_x*9)   and item <= mod_y + 72 + (mod_x*9) :
-            tmp_grid += "_"
+            cursor_grid += "_"            
         else:
-            tmp_grid += grid[item]
+            cursor_grid += grid[item]
 
+    mod_x = 0
+    mod_y = 70
     
-    return tmp_grid
+    mark_grid = ""
+
+    for item in range(len(cursor_grid)):
+        
+        if item in [70,79,88, 210,219,228, 350,359, 368]:
+            if grid_list[mod_x] == 'X':
+                mark_grid += 'X'
+            elif grid_list[mod_x] == 'O':
+                mark_grid += 'O'
+            else:
+                mark_grid += cursor_grid[item]
+            mod_x += 1
+        else:
+            mark_grid += cursor_grid[item]
+  
+
+    return mark_grid
 
 def draw_grid_validation_position_input(position):
     if position >= 99:
@@ -60,7 +78,10 @@ def draw_grid_validation_position_input(position):
 
 def draw_grid_make_mark(condition, index, lista, znak):
     if condition >= 99:
-        lista[index] = znak
-        return lista
+        if not lista[index] == 'X' and not lista[index] == 'O':
+            lista[index] = znak
+            return lista
+        else:
+            pass
     else:
         pass

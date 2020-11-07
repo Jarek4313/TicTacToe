@@ -32,7 +32,9 @@ def main():
                 game.Set_Game_Mode(game_mode)
                 game.Set_Difficulty_Level(difficult_level)     
                 game.Set_Players_Name()
+                game.Set_Cpu()
                 game.Start_Game()
+                #game.End_Game()
                         
             menu_option = None
 
