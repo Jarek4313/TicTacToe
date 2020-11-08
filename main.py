@@ -46,8 +46,5 @@ def main():
             input("Exit")
             is_game_is_process = False
 
-
-
-
 if __name__ == "__main__":
     main()

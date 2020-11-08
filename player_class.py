@@ -39,8 +39,10 @@ class Player:
                 self.__name = new_name
             else:
                 print("Niewłaściwy znak!")
+                input()
         else:
             print("Liczba znaków przekracza 20")
+            input()
 
     @Name.deleter
     def Name(self):

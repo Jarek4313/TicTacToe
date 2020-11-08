@@ -76,12 +76,11 @@ def draw_grid_validation_position_input(position):
     else:
         return position
 
-def draw_grid_make_mark(condition, index, lista, znak):
-    if condition >= 99:
-        if not lista[index] == 'X' and not lista[index] == 'O':
-            lista[index] = znak
-            return lista
-        else:
-            pass
+def draw_grid_make_mark(index, lista, znak):
+    if not lista[index] == 'X' and not lista[index] == 'O':
+        lista[index] = znak
+        return True
+        #return lista
     else:
-        pass
+        #pass
+        return False
