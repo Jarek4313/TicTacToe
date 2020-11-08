@@ -10,15 +10,14 @@ from player_class import Player
 from game_mode_class import Game_Mode
 
 def main():
-    #print("-"*80,"main OK")
 
     #główne obiekty projektu
     difficult_level = Dificult_Level()
     game_mode = Game_Mode()
     game = Game()
 
-
-    while True:
+    is_game_is_process = True
+    while is_game_is_process:
 
         menu_option = draw_menu(main_menu, game_logo)
 
@@ -38,7 +37,6 @@ def main():
                         
             menu_option = None
 
-
         if menu_option == 2:
             menu_option = draw_menu(set_difficulty_level_menu, 'difficulty level')
             difficult_level.Level = menu_option
@@ -46,7 +44,7 @@ def main():
 
         if menu_option == 3:
             input("Exit")
-            return
+            is_game_is_process = False
 
 
 

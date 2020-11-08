@@ -19,14 +19,7 @@ class Game:
         self.__cpu = None
         self.__difficulty_level = Dificult_Level()
         self.__game_mode = Game_Mode()
-
-
-    # @property
-    # def Game_Mode(self):
-    #     return self.__game_mode
-    # @Game_Mode.setter
-    # def Game_Mode(self, new_game_mode):
-    #     self.__game_mode = new_game_mode
+        self.__actual_player = None
 
     def Set_Game_Mode(self, game_mode):
         #self.__game_mode = Game_Mode()
@@ -63,24 +56,29 @@ class Game:
     def Set_Cpu(self):
         if self.__game_mode.Mode == "player-computer":
             self.__cpu = Computer()
-
+##########################################################################wyświetlanie informacji o rozgrywce
     def draw_game_info(self):
-        print(self.__game_mode.Mode)
-        if self.__game_mode.Mode == 'player-computer':
-            print("Gracz: {}".format(self.__player_one.Name))
-            print("Gracz:")
-
-    def switch_round(self, actual_mark, game_input):
+        #print(self.__game_mode.Mode)
+        if self.__game_mode.Mode == 'player-player':
+            print("Aktualany gracz {} znak {}".format(self.__actual_player.Name, self.__actual_player.Mark))
+            
+        # if self.__game_mode.Mode == 'player-computer':
+        #     print("Gracz: {}".format(self.__player_one.Name))
+        #     print("Gracz:")
+##########################################################################
+    def switch_round(self,game_input):
         if game_input >= 99:            
             print('switch')
-            if actual_mark == self.__player_one.Mark:
-                return self.__player_two.Mark
+            if self.__actual_player == self.__player_one:
+                self.__actual_player = self.__player_two
+                #return self.__player_two.Mark
             else:
-                return self.__player_one.Mark
-        else:
-            return actual_mark
-
-    def check_win_condition_for_part(self, grid_list, mark):
+                self.__actual_player = self.__player_one
+                #return self.__player_one.Mark
+        # else:
+        #     return actual_mark
+##########################################################################sprawdzanie czy wystąpił warunek zwycięstwa
+    def check_win_condition_for_gamer(self, grid_list, mark):
         row_point = [0,0,0]
         column_point = [0,0,0]
         diagonal_point = [0,0]
@@ -110,48 +108,41 @@ class Game:
             return True
         if max(diagonal_point) == 3:
             return True
+
     def check_win_condition(self, grid_list):
-        if self.check_win_condition_for_part(grid_list, self.__player_one.Mark):
+        if self.check_win_condition_for_gamer(grid_list, self.__player_one.Mark):
             self.__player_one.Win = True
-            return True
-        if self.check_win_condition_for_part(grid_list, self.__player_two.Mark):
+            return False
+        if self.check_win_condition_for_gamer(grid_list, self.__player_two.Mark):
             self.__player_two.Win = True
-            return True
-        return False
+            return False
+        return True
+##########################################################################
 
     def Start_Game(self):
         os.system("cls || clear")
         game_input = 0
         game_position_index = 0
         grid_list = [' ',' ',' ',' ',' ',' ',' ',' ',' ']
-        actual_mark = self.__player_one.Mark
-
-        while True:
+        #actual_mark = self.__player_one.Mark
+        continue_game_condition = True
+        self.__actual_player = self.__player_one
+        while continue_game_condition:
             os.system("cls || clear")
+
             print(draw_grid(game_input, grid_list))
+            
             self.draw_game_info()
-            print(actual_mark)
 
+            continue_game_condition = self.check_win_condition(grid_list)              
+            
             game_input += game_play_input()
-            draw_grid_make_mark(game_input, game_position_index, grid_list, actual_mark)
+            draw_grid_make_mark(game_input, game_position_index, grid_list, self.__actual_player.Mark)
             
-            actual_mark = self.switch_round(actual_mark, game_input)
+            self.switch_round(game_input)
             
-
-            if self.check_win_condition(grid_list):
-                input("Wygrana!")
-                break
-
             game_input = draw_grid_validation_position_input(game_input)
             game_position_index = game_input
 
-            
-
             time.sleep(0.21)
-            
-            
-        #print(self.__game_mode.Mode)
-        #print(self.__difficulty_level.Level)
-        #print(self.__player_one.Name)
-        #print(self.__player_two.Name)
-        #input("OK")
+
