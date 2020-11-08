@@ -62,6 +62,7 @@ class Game:
         #print(self.__game_mode.Mode)
         if self.__game_mode.Mode == 'player-player':
             print("Aktualany gracz {} znak {}".format(self.__actual_player.Name, self.__actual_player.Mark))
+            print("Aktualne punkty: {:.2f}".format(self.__actual_player.Time))
             
         # if self.__game_mode.Mode == 'player-computer':
         #     print("Gracz: {}".format(self.__player_one.Name))
@@ -115,13 +116,25 @@ class Game:
 
     def check_win_condition(self, grid_list):
         if self.check_win_condition_for_gamer(grid_list, self.__player_one.Mark):
-            self.__player_one.Win = True
+            #self.__player_one.Win = True
+            self.__actual_player = self.__player_one
+            self.__actual_player.Win = True
             return False
+
         if self.check_win_condition_for_gamer(grid_list, self.__player_two.Mark):
-            self.__player_two.Win = True
+            #self.__player_two.Win = True
+            self.__actual_player = self.__player_two
+            self.__actual_player.Win = True
             return False
+
         return True
 #####################################
+######################################################################################
+# Sprawdzanie czy wystąpił warunek zwycięstwa
+    def Start_Time(self):
+        return self.__actual_player.Counter_Time(True, 0)
+    def Stop_Time(self, __time):
+        self.__actual_player.Counter_Time(False,__time)
 
     def Start_Game(self):
         os.system("cls || clear")
@@ -129,7 +142,7 @@ class Game:
         game_input_value_only_grid_position = 0
         grid_list = [' ',' ',' ',' ',' ',' ',' ',' ',' ']
         continue_game_condition = True
-        #input_mark_in_free_slot = True
+        input_mark_in_free_slot = True
         self.__actual_player = self.__player_one
         
         while continue_game_condition:
@@ -138,17 +151,29 @@ class Game:
             print(draw_grid(game_input_value, grid_list))
             
             self.draw_game_info()
-
-            continue_game_condition = self.check_win_condition(grid_list)              
+            
+            continue_game_condition = self.check_win_condition(grid_list)
+            if not continue_game_condition:
+                break
+            
+            __time = self.Start_Time()
             
             game_input_value += game_play_input()
             if game_input_value >= 99:
-                input_makr_in_free_slot = draw_grid_make_mark(game_input_value_only_grid_position, grid_list, self.__actual_player.Mark)
+                input_mark_in_free_slot = draw_grid_make_mark(game_input_value_only_grid_position, grid_list, self.__actual_player.Mark)
             
-            self.switch_round(game_input_value, input_makr_in_free_slot)
+            self.switch_round(game_input_value, input_mark_in_free_slot)
             
+            self.Stop_Time(__time)
+
             game_input_value = draw_grid_validation_position_input(game_input_value)
             game_input_value_only_grid_position = game_input_value
 
             time.sleep(0.21)
 
+    def End_Game(self):
+        os.system("cls || clear")
+        draw_logo("you win !")
+        print("Brawo wygrałeś: {}".format(self.__actual_player.Name))
+        print("Twój wynik: {:.2f}".format(self.__actual_player.Time))
+        input()

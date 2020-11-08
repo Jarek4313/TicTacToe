@@ -1,4 +1,5 @@
 import sys
+import time 
 from const_variables import alpha_numeric_upper_and_down
 
 #sys.path.append('c:/TicTacToe/function_folder/')
@@ -11,7 +12,7 @@ class Player:
         self.__poziom = None
         self.__mark = mark
         self.__win = False
-
+        self.__time = 0.0
     @property
     def Win(self):
         return self.__win
@@ -47,3 +48,27 @@ class Player:
     @Name.deleter
     def Name(self):
         self.__name = None
+
+    @property
+    def Time(self):
+        return self.__time
+
+    def Counter_Time(self, start_timer, start):
+        actual_time = 0
+        
+        if start_timer:
+            actual_time = time.time()
+            return actual_time
+        else:
+            stop = time.time()
+            self.__time += stop - start
+
+
+
+# start = 0
+# stop = 0
+# end = 0
+# start = time.time()
+# stop = time.time()
+# end += stop - start
+# print(end)

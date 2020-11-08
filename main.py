@@ -33,7 +33,7 @@ def main():
                 game.Set_Players_Name()
                 game.Set_Cpu()
                 game.Start_Game()
-                #game.End_Game()
+                game.End_Game()
                         
             menu_option = None
 

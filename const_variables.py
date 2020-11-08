@@ -1,6 +1,6 @@
 alpha_numeric_upper_and_down = 'AaĄąBbCĆcćDdEeĘęFfGgHhIiJjKkLlŁłMmNnŃńOoÓóPpQqRrSsŚśTtUuVvWwXxYyZzŹźŻż'
 
-alpha_ascii_list = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','r','s','t','u','w','v','x','y','z',' ']
+alpha_ascii_list = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','r','s','t','u','w','v','x','y','z',' ','!']
 
 game_logo = "tic tac toe"
 
