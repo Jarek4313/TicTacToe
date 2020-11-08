@@ -62,13 +62,3 @@ class Player:
         else:
             stop = time.time()
             self.__time += stop - start
-
-
-
-# start = 0
-# stop = 0
-# end = 0
-# start = time.time()
-# stop = time.time()
-# end += stop - start
-# print(end)

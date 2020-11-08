@@ -20,6 +20,7 @@ class Game:
         self.__difficulty_level = Dificult_Level()
         self.__game_mode = Game_Mode()
         self.__actual_player = None
+        self.__move_cpu = None
 
     def Set_Game_Mode(self, game_mode):
         self.__game_mode = game_mode
@@ -32,7 +33,8 @@ class Game:
     def Set_Players_Name(self):
         self.__player_one = Player('X')
         self.__player_two = Player('O')
-        
+        self.__cpu = Computer()
+
         if self.__game_mode.Mode == "player-player":
             while self.__player_one.Name == None:
                 os.system("cls || clear")
@@ -47,15 +49,17 @@ class Game:
                 self.__player_two.Name = tmp_name
 
         elif self.__game_mode.Mode == "player-computer":
-            draw_logo('set name player')
-            tmp_name = input("Podaj imię gracza: ")
-            self.__player_one.Name = tmp_name
+            while self.__player_one.Name == None:
+                os.system("cls || clear")
+                draw_logo('name player')
+                tmp_name = input("Podaj imię gracza pierwszego: ")
+                self.__player_one.Name = tmp_name            
+            self.__move_cpu = False
         else:
             pass
 
     def Set_Cpu(self):
-        if self.__game_mode.Mode == "player-computer":
-            self.__cpu = Computer()
+        pass
 ######################################################################################
 # Wyświetlanie informacji o rozgrywce
     def draw_game_info(self):
@@ -64,23 +68,30 @@ class Game:
             print("Aktualany gracz {} znak {}".format(self.__actual_player.Name, self.__actual_player.Mark))
             print("Aktualne punkty: {:.2f}".format(self.__actual_player.Time))
             
-        # if self.__game_mode.Mode == 'player-computer':
-        #     print("Gracz: {}".format(self.__player_one.Name))
-        #     print("Gracz:")
+        if self.__game_mode.Mode == 'player-computer':
+            print("Gracz: {}".format(self.__player_one.Name))
+            
 #####################################
 ######################################################################################
 # Przełączenie graczy w zależności czy wykonał ruch, gracz musi postawić swój znak w wolnym miejscu na siatce
-    def switch_round(self,game_input,input_makr_in_free_slot):
-        if game_input >= 99 and input_makr_in_free_slot:            
-            print('switch')
-            if self.__actual_player == self.__player_one:
-                self.__actual_player = self.__player_two
-                #return self.__player_two.Mark
-            else:
-                self.__actual_player = self.__player_one
-                #return self.__player_one.Mark
-        # else:
-        #     return actual_mark
+    def switch_round(self,game_input,input_maker_in_free_slot):
+        if game_input >= 99 and input_maker_in_free_slot:            
+            if self.__game_mode.Mode == "player-player":
+                if self.__actual_player == self.__player_one:
+                    self.__actual_player = self.__player_two
+                else:
+                    self.__actual_player = self.__player_one
+                
+            elif self.__game_mode.Mode == "player-computer":
+                if self.__actual_player == self.__player_one:
+                    self.__actual_player = self.__player_two
+                    self.__move_cpu = True
+                else:
+                    self.__actual_player = self.__player_one
+                    self.__move_cpu = False
+                    
+                
+
 ######################################################################################
 # Sprawdzanie czy wystąpił warunek zwycięstwa
     def check_win_condition_for_gamer(self, grid_list, mark):
@@ -115,14 +126,12 @@ class Game:
             return True
 
     def check_win_condition(self, grid_list):
-        if self.check_win_condition_for_gamer(grid_list, self.__player_one.Mark):
-            #self.__player_one.Win = True
+
+        if self.check_win_condition_for_gamer(grid_list, self.__player_one.Mark):            
             self.__actual_player = self.__player_one
             self.__actual_player.Win = True
             return False
-
-        if self.check_win_condition_for_gamer(grid_list, self.__player_two.Mark):
-            #self.__player_two.Win = True
+        if self.check_win_condition_for_gamer(grid_list, self.__player_two.Mark):            
             self.__actual_player = self.__player_two
             self.__actual_player.Win = True
             return False
@@ -153,27 +162,77 @@ class Game:
             self.draw_game_info()
             
             continue_game_condition = self.check_win_condition(grid_list)
+            
+            #warunek wygranej, sprawdzany po wyświetleniu siatki, a przed wykonaniem ruchu przez kolejnego gracza
             if not continue_game_condition:
+                time.sleep(0.75)
                 break
             
-            __time = self.Start_Time()
-            
-            game_input_value += game_play_input()
-            if game_input_value >= 99:
-                input_mark_in_free_slot = draw_grid_make_mark(game_input_value_only_grid_position, grid_list, self.__actual_player.Mark)
-            
-            self.switch_round(game_input_value, input_mark_in_free_slot)
-            
-            self.Stop_Time(__time)
+            if self.__game_mode.Mode == "player-player":
+                
+                __time = self.Start_Time()
 
-            game_input_value = draw_grid_validation_position_input(game_input_value)
-            game_input_value_only_grid_position = game_input_value
+                game_input_value += game_play_input()
 
-            time.sleep(0.21)
+                if game_input_value >= 99:
+                    input_mark_in_free_slot = draw_grid_make_mark(game_input_value_only_grid_position, grid_list, self.__actual_player.Mark)
+
+                self.switch_round(game_input_value, input_mark_in_free_slot)
+                
+                self.Stop_Time(__time)    
+                game_input_value = draw_grid_validation_position_input(game_input_value)
+            
+                game_input_value_only_grid_position = game_input_value
+                
+                time.sleep(0.21)            
+
+            if self.__game_mode.Mode == "player-computer":
+                __time = self.Start_Time()
+
+                if self.__move_cpu == False:
+                    game_input_value += game_play_input()
+                else:
+                    game_input_value += 99
+                
+                if game_input_value >= 99:
+                    input_mark_in_free_slot = draw_grid_make_mark(game_input_value_only_grid_position, grid_list, self.__actual_player.Mark)
+
+                self.switch_round(game_input_value, input_mark_in_free_slot)
+
+                self.Stop_Time(__time)
+
+                game_input_value = draw_grid_validation_position_input(game_input_value)
+
+                if self.__move_cpu == False:
+                    game_input_value_only_grid_position = game_input_value
+                else:
+                    game_input_value_only_grid_position = self.__cpu.Random
+                    time.sleep(.5)
+
+                time.sleep(0.21)
 
     def End_Game(self):
         os.system("cls || clear")
-        draw_logo("you win !")
-        print("Brawo wygrałeś: {}".format(self.__actual_player.Name))
-        print("Twój wynik: {:.2f}".format(self.__actual_player.Time))
+        
+        if self.__game_mode.Mode == "player-player":
+            if self.__player_one.Win:
+                draw_logo("you win !")
+                print("Brawo wygrałeś: {}".format(self.__player_one.Name))
+                print("Twój wynik: {:.2f}".format(self.__player_one.Time))
+            elif self.__player_two.Win:
+                draw_logo("you win !")
+                print("Brawo wygrałeś: {}".format(self.__player_two.Name))
+                print("Twój wynik: {:.2f}".format(self.__player_two.Time))
+            else:
+                draw_logo('really')
+
+        elif self.__game_mode.Mode == "player-computer":
+            if self.__player_one.Win:
+                draw_logo("you win !")
+                print("Brawo wygrałeś: {}".format(self.__actual_player.Name))
+                print("Twój wynik: {:.2f}".format(self.__actual_player.Time))
+            else:
+                draw_logo("you lost !")
+                print("Brawo przegrałeś: {}".format(self.__actual_player.Name))
+                print("Twój wynik: {:.2f}".format(self.__actual_player.Time))
         input()
